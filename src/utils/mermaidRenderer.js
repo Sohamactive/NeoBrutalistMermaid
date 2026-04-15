@@ -1,57 +1,87 @@
 import mermaid from 'mermaid'
 
 let initialized = false
+const MIN_BORDER_WIDTH = 2
+const MAX_BORDER_WIDTH = 4
+const DEFAULT_BORDER_WIDTH = 3
+const SVG_OPENING_TAG_REGEX = /<svg\b([^>]*)>/i
+const SAFE_COLOR_REGEX = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i
+const ALLOWED_FONT_FAMILIES = new Set([
+  'ui-monospace, SFMono-Regular, Menlo, monospace',
+  'Helvetica, Arial, sans-serif',
+  'system-ui, -apple-system, sans-serif',
+])
+
+function sanitizeColor(value, fallback) {
+  return SAFE_COLOR_REGEX.test(value) ? value : fallback
+}
+
+function sanitizeFontFamily(value, fallback) {
+  return ALLOWED_FONT_FAMILIES.has(value) ? value : fallback
+}
 
 function applyNeoBrutalistSvgTheme(svg, themeSettings) {
-  const borderWidth = Math.max(2, Math.min(4, Number(themeSettings.borderThickness) || 3))
+  const borderWidth = Math.max(
+    MIN_BORDER_WIDTH,
+    Math.min(MAX_BORDER_WIDTH, Number(themeSettings.borderThickness) || DEFAULT_BORDER_WIDTH),
+  )
   const background = themeSettings.backgroundMode === 'dark' ? '#111111' : '#ffffff'
   const text = themeSettings.backgroundMode === 'dark' ? '#ffffff' : '#111111'
-  const accent = themeSettings.diagramAccent
+  const accent = sanitizeColor(themeSettings.diagramAccent, '#ffef00')
+  const fontFamily = sanitizeFontFamily(
+    themeSettings.fontFamily,
+    'ui-monospace, SFMono-Regular, Menlo, monospace',
+  )
+  const labelBorderWidth = Math.max(1, borderWidth - 1)
 
   const styleTag = `
 <style>
-.neo-brutal-diagram {
+svg {
   background: ${background};
   color: ${text};
-  font-family: ${themeSettings.fontFamily};
+  font-family: ${fontFamily};
 }
-.neo-brutal-diagram .node rect,
-.neo-brutal-diagram .node circle,
-.neo-brutal-diagram .node ellipse,
-.neo-brutal-diagram .node polygon,
-.neo-brutal-diagram .cluster rect {
+.node rect,
+.node circle,
+.node ellipse,
+.node polygon,
+.cluster rect {
   fill: ${accent} !important;
   stroke: #000 !important;
   stroke-width: ${borderWidth}px !important;
   rx: 0 !important;
   ry: 0 !important;
 }
-.neo-brutal-diagram .edgePath path,
-.neo-brutal-diagram .flowchart-link,
-.neo-brutal-diagram .messageLine0,
-.neo-brutal-diagram .messageLine1,
-.neo-brutal-diagram .relation,
-.neo-brutal-diagram .activation0,
-.neo-brutal-diagram .activation1 {
+.edgePath path,
+.flowchart-link,
+.messageLine0,
+.messageLine1,
+.relation,
+.activation0,
+.activation1 {
   stroke: #000 !important;
   stroke-width: ${borderWidth}px !important;
 }
-.neo-brutal-diagram text,
-.neo-brutal-diagram .messageText,
-.neo-brutal-diagram .edgeLabel {
+text,
+.messageText,
+.edgeLabel {
   fill: ${text} !important;
   font-weight: 700;
 }
-.neo-brutal-diagram .labelBox,
-.neo-brutal-diagram .edgeLabel rect {
+.labelBox,
+.edgeLabel rect {
   fill: ${background} !important;
   stroke: #000 !important;
-  stroke-width: ${Math.max(2, borderWidth - 1)}px !important;
+  stroke-width: ${labelBorderWidth}px !important;
 }
 </style>`
 
-  const withClass = svg.replace('<svg', '<svg class="neo-brutal-diagram"')
-  return withClass.replace('>', `>${styleTag}`)
+  const openingTagMatch = svg.match(SVG_OPENING_TAG_REGEX)
+  if (!openingTagMatch) {
+    console.warn('Neo-brutalist styling skipped: Mermaid output missing opening <svg> tag.')
+    return svg
+  }
+  return svg.replace(SVG_OPENING_TAG_REGEX, `<svg${openingTagMatch[1]}>${styleTag}`)
 }
 
 export async function renderMermaid({ code, config, themeSettings }) {
@@ -81,7 +111,7 @@ export async function renderMermaid({ code, config, themeSettings }) {
     mermaid.initialize(runtimeConfig)
   }
 
-  const id = `diagram-${Date.now()}-${Math.floor(Math.random() * 1_000_000)}`
+  const id = `diagram-${crypto.randomUUID()}`
   const { svg } = await mermaid.render(id, code)
   return applyNeoBrutalistSvgTheme(svg, themeSettings)
 }
