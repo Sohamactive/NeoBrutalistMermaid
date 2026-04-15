@@ -1,0 +1,167 @@
+@import 'tailwindcss';
+
+:root {
+  --primary: #ff2a2a;
+  --diagram-accent: #ffef00;
+  --bg: #ffffff;
+  --panel-bg: #fffdf4;
+  --text: #111111;
+  --border-thickness: 3px;
+  --ui-font: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--ui-font);
+}
+
+.sr-only {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+.app-shell {
+  width: min(1400px, 100%);
+  margin: 0 auto;
+  display: grid;
+  gap: 1rem;
+}
+
+.app-shell.presentation {
+  width: min(1600px, 100%);
+}
+
+.app-shell.fullscreen {
+  width: 100%;
+}
+
+.title {
+  margin: 0;
+  padding: 0.7rem 1rem;
+  border: var(--border-thickness) solid #000;
+  background: var(--primary);
+  color: #000;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  box-shadow: 6px 6px 0 #000;
+  font-size: clamp(1.2rem, 2vw, 2rem);
+}
+
+.brutal-panel {
+  background: var(--panel-bg);
+  border: var(--border-thickness) solid #000;
+  box-shadow: 6px 6px 0 #000;
+  padding: 0.9rem;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 0.7rem;
+}
+
+.panel-header h2 {
+  margin: 0;
+  font-size: 1rem;
+  text-transform: uppercase;
+}
+
+.panel-header p {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-bottom: 0.6rem;
+}
+
+.brutal-button {
+  border: var(--border-thickness) solid #000;
+  box-shadow: 3px 3px 0 #000;
+  background: #fff;
+  color: #000;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 0.45rem 0.75rem;
+  cursor: pointer;
+}
+
+.brutal-button[data-active='true'] {
+  background: var(--primary);
+}
+
+.brutal-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.brutal-input {
+  width: 100%;
+  border: var(--border-thickness) solid #000;
+  box-shadow: 3px 3px 0 #000;
+  background: #fff;
+  color: #000;
+  padding: 0.45rem;
+  font: inherit;
+}
+
+.control-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+
+.control-grid label {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+}
+
+.editor-preview-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 1024px) {
+  .editor-preview-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.preview-canvas {
+  min-height: 420px;
+  overflow: auto;
+  border: var(--border-thickness) solid #000;
+  background: #fff;
+  padding: 0.5rem;
+}
+
+.preview-canvas svg {
+  min-width: 100%;
+  height: auto;
+}
+
+.error-box {
+  border: var(--border-thickness) solid #000;
+  box-shadow: 4px 4px 0 #000;
+  background: #ffd1d1;
+  padding: 0.65rem;
+}
