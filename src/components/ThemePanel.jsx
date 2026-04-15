@@ -18,7 +18,7 @@ export default function ThemePanel({ themeSettings, mermaidConfig, onThemeSettin
     <section className="brutal-panel" aria-label="Theme and mermaid settings">
       <header className="panel-header">
         <h2>Theme + Config</h2>
-        <p>Neo-brutalist controls</p>
+        <p>Diagram-focused controls</p>
       </header>
 
       <div className="control-grid">
