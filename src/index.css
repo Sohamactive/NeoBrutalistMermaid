@@ -1,0 +1,168 @@
+@import 'tailwindcss';
+
+:root {
+  --primary: #ff2a2a;
+  --diagram-accent: #ffef00;
+  --bg: #ffffff;
+  --panel-bg: #fffdf4;
+  --text: #111111;
+  --border-thickness: 3px;
+  --ui-font: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--ui-font);
+}
+
+.sr-only {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+.app-shell {
+  width: min(1400px, 100%);
+  margin: 0 auto;
+  display: grid;
+  gap: 1rem;
+}
+
+.app-shell.presentation {
+  width: min(1600px, 100%);
+}
+
+.app-shell.fullscreen {
+  width: 100%;
+}
+
+.title {
+  margin: 0;
+  padding: 0.7rem 1rem;
+  border: 1px solid #d7d7d7;
+  border-radius: 0.5rem;
+  background: #f8f8f8;
+  color: #171717;
+  font-size: clamp(1.2rem, 2vw, 2rem);
+}
+
+.brutal-panel {
+  background: var(--panel-bg);
+  border: 1px solid #d7d7d7;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 8%);
+  padding: 0.9rem;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 0.7rem;
+}
+
+.panel-header h2 {
+  margin: 0;
+  font-size: 1rem;
+  color: #222;
+}
+
+.panel-header p {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-bottom: 0.6rem;
+}
+
+.brutal-button {
+  border: 1px solid #c9c9c9;
+  border-radius: 0.4rem;
+  box-shadow: 0 1px 1px rgb(0 0 0 / 8%);
+  background: #fff;
+  color: #1c1c1c;
+  font-weight: 600;
+  padding: 0.45rem 0.75rem;
+  cursor: pointer;
+}
+
+.brutal-button[data-active='true'] {
+  background: #ececec;
+  border-color: #b7b7b7;
+}
+
+.brutal-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.brutal-input {
+  width: 100%;
+  border: 1px solid #c9c9c9;
+  border-radius: 0.4rem;
+  background: #fff;
+  color: #1c1c1c;
+  padding: 0.45rem;
+  font: inherit;
+}
+
+.control-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+
+.control-grid label {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+}
+
+.editor-preview-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 1024px) {
+  .editor-preview-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.preview-canvas {
+  min-height: 420px;
+  overflow: auto;
+  border: 1px solid #d7d7d7;
+  border-radius: 0.5rem;
+  background: #fff;
+  padding: 0.5rem;
+}
+
+.preview-canvas svg {
+  min-width: 100%;
+  height: auto;
+}
+
+.error-box {
+  border: 1px solid #f2b3b3;
+  border-radius: 0.5rem;
+  background: #fff4f4;
+  padding: 0.65rem;
+}
